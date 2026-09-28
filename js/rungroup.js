@@ -106,9 +106,16 @@ function applySelection(node, index) {
 }
 
 function onRowClick(node, idx, v) {
+  const chain = node.properties.runMode === "chain";
   if (!v) {
-    // 关掉当前选中组 = 全部组静音（空闲态）。不强制 always-one：
-    // 用户有权让所有组都不跑，此时 Queue 无输出可执行。
+    if (chain && idx >= 1) {
+      // 接力模式关掉第N组 = 退挡到第N-1段：前组恢复为自己的最终阶段
+      // （它的 Save 复活），第N组及其后的组全部静音。
+      applySelection(node, idx - 1);
+      return;
+    }
+    // 单选模式关选中组 / 接力模式关第一组 = 全部静音（空闲态）。
+    // 接力链上第一组是依赖源头，关掉它整条链都无法成立。
     const groups = getGroups();
     for (const g of groups) {
       for (const n of g.nodes) n.mode = MODE_MUTE;
