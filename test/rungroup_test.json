@@ -1,0 +1,106 @@
+{
+  "id": "b1e2c3d4-0000-4000-8000-rungrouptest",
+  "revision": 0,
+  "last_node_id": 5,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "EmptyImage",
+      "pos": [80, 180],
+      "size": [270, 106],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [1], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "EmptyImage"},
+      "widgets_values": [64, 64, 1, 16711680]
+    },
+    {
+      "id": 2,
+      "type": "SaveImage",
+      "pos": [400, 180],
+      "size": [270, 90],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 1}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "SaveImage"},
+      "widgets_values": ["rungroup_test/gA_红色组"]
+    },
+    {
+      "id": 3,
+      "type": "EmptyImage",
+      "pos": [80, 420],
+      "size": [270, 106],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [2], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "EmptyImage"},
+      "widgets_values": [64, 64, 1, 255]
+    },
+    {
+      "id": 4,
+      "type": "SaveImage",
+      "pos": [400, 420],
+      "size": [270, 90],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 2}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "SaveImage"},
+      "widgets_values": ["rungroup_test/gB_蓝色组"]
+    },
+    {
+      "id": 5,
+      "type": "RunGroupSwitch",
+      "pos": [80, 620],
+      "size": [300, 60],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {"selectedGroup": ""},
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "IMAGE"],
+    [2, 3, 0, 4, 0, "IMAGE"]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "组A-红色",
+      "bounding": [40, 120, 680, 200],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "组B-蓝色",
+      "bounding": [40, 360, 680, 200],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
