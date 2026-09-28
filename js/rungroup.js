@@ -106,15 +106,17 @@ function applySelection(node, index) {
 }
 
 function onRowClick(node, idx, v) {
-  const groups = getGroups();
   if (!v) {
-    // 不允许全关（always one）：把当前运行中的行勾回去
-    const cur = groups.findIndex((g) => g.active);
-    if (cur >= 0) {
-      const rows = node.widgets.filter((w) => w.type === "toggle");
-      if (rows[cur]) rows[cur].value = true;
+    // 关掉当前选中组 = 全部组静音（空闲态）。不强制 always-one：
+    // 用户有权让所有组都不跑，此时 Queue 无输出可执行。
+    const groups = getGroups();
+    for (const g of groups) {
+      for (const n of g.nodes) n.mode = MODE_MUTE;
     }
+    node.properties.selectedGroup = "";
+    getGraph()?.change?.();
     app.canvas?.setDirty?.(true, true);
+    refreshRows(node);
     return;
   }
   applySelection(node, idx);
