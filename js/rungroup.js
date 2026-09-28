@@ -92,16 +92,24 @@ function onRowClick(node, idx, v) {
   applySelection(node, idx);
 }
 
-// 行 widget 与分组做增量对齐：行数缺则补、多则删；标签/勾选态每轮刷新。
-// 行与分组按位置索引对应，callback 里的 idx 永远指向点击时的 groups[idx]。
+// 行 widget 与分组做增量对齐：先清掉非行 widget（无组时的提示按钮等），
+// 再补行/删行；标签、勾选态每轮刷新。行回调动态解析自身当前位置，
+// 杜绝分组增删导致行序变化后的错位（工作流加载时分组晚于节点配置，
+// 提示按钮会先占住第 0 行，必须自愈）。
 function refreshRows(node) {
   try {
     node.widgets = node.widgets ?? [];
-    const groups = getGroups();
 
+    for (let i = node.widgets.length - 1; i >= 0; i--) {
+      if (node.widgets[i].type !== "toggle") {
+        node.widgets.splice(i, 1);
+        node.setSize?.(node.computeSize());
+      }
+    }
+
+    const groups = getGroups();
     if (!groups.length) {
-      if (node.widgets.length !== 1 || node.widgets[0].type !== "button") {
-        node.widgets.length = 0;
+      if (!node.widgets.length) {
         node.addWidget(
           "button",
           "画布上还没有分组（框选节点后 Ctrl+G 创建）",
@@ -115,16 +123,15 @@ function refreshRows(node) {
 
     let structureChanged = false;
     while (node.widgets.length > groups.length) {
-      node.removeWidget?.(node.widgets[node.widgets.length - 1]);
+      node.widgets.pop();
       structureChanged = true;
     }
     while (node.widgets.length < groups.length) {
-      const idx = node.widgets.length;
       node.addWidget(
         "toggle",
-        `组${idx + 1}`,
+        `组${node.widgets.length + 1}`,
         false,
-        (v) => onRowClick(node, idx, v),
+        null,
         { on: "▶ 运行", off: "静音" }
       );
       structureChanged = true;
@@ -134,6 +141,10 @@ function refreshRows(node) {
       const w = node.widgets[i];
       const label = `${groups[i].title} · ${groups[i].nodes.length}节点`;
       if (w.label !== label) w.label = label;
+      w.callback = (v) => {
+        const idx = node.widgets.indexOf(w);
+        onRowClick(node, idx, v);
+      };
       if (w.value !== groups[i].active) w.value = groups[i].active;
     }
 
