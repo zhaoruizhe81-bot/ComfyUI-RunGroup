@@ -57,5 +57,9 @@
 
 ## 安装
 
-放入 `ComfyUI/custom_nodes/ComfyUI-RunGroup/`（含 `__init__.py` 与 `js/rungroup.js`），
-重启 ComfyUI，浏览器硬刷新（Ctrl+F5）。
+```bash
+git clone https://github.com/zhaoruizhe81-bot/ComfyUI-RunGroup.git ComfyUI/custom_nodes/ComfyUI-RunGroup
+```
+
+重启 ComfyUI，浏览器硬刷新（Ctrl+F5）。无法直连 GitHub 的机器：在本机下载后，
+把整个目录（至少含 `__init__.py` 与 `js/rungroup.js`）拷进 `custom_nodes/` 即可。
