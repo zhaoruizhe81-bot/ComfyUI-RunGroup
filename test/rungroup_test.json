@@ -43,13 +43,13 @@
       "order": 2,
       "mode": 0,
       "inputs": [
-        {"name": "images", "type": "IMAGE", "link": 2}
+        {"name": "image", "type": "IMAGE", "link": 2}
       ],
       "outputs": [
         {"name": "IMAGE", "type": "IMAGE", "links": [3], "slot_index": 0}
       ],
       "properties": {"Node name for S&R": "ImageScaleBy"},
-      "widgets_values": ["nearest", 1.0]
+      "widgets_values": ["nearest-exact", 1.0]
     },
     {
       "id": 4,
